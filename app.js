@@ -12,7 +12,7 @@ content.innerHTML =
 try{
 
 const response = await fetch(
-"https://api.allorigins.win/raw?url=https://api.football-data.org/v4/matches",
+"https://corsproxy.io/?https://api.football-data.org/v4/matches",
 {
 headers:{
 "X-Auth-Token": apiKey
@@ -23,7 +23,23 @@ headers:{
 const data =
 await response.json();
 
-content.innerHTML = "";
+content.innerHTML = `
+
+<div class="hero-card">
+
+<h2>🔥 Günün Bankosu</h2>
+
+<p>
+Galatasaray vs Fenerbahçe
+</p>
+
+<div class="hero-rate">
+%92 AI Güven
+</div>
+
+</div>
+
+`;
 
 data.matches.slice(0,6).forEach(mac=>{
 
