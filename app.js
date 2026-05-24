@@ -12,7 +12,7 @@ content.innerHTML =
 try{
 
 const response = await fetch(
-"https://api.football-data.org/v4/matches",
+"https://api.allorigins.win/raw?url=https://api.football-data.org/v4/matches",
 {
 headers:{
 "X-Auth-Token": apiKey
@@ -204,24 +204,6 @@ AI Canlı Tahmin:
 </div>
 
 `;
-
-let dakika = 67;
-
-setInterval(()=>{
-
-dakika++;
-
-const dakikaElement =
-document.getElementById("dakika");
-
-if(dakikaElement){
-
-dakikaElement.innerHTML =
-dakika + "'";
-
-}
-
-},60000);
 
 }
 
