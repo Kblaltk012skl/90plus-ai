@@ -1,27 +1,7 @@
 const content =
 document.getElementById("content");
 
-const apiKey =
-"8fc952c2878440478c5aea4fbc80d5b5";
-
-async function anaSayfa(){
-
-content.innerHTML =
-"<p style='text-align:center'>Yükleniyor...</p>";
-
-try{
-
-const response = await fetch(
-"https://corsproxy.io/?https://api.football-data.org/v4/matches",
-{
-headers:{
-"X-Auth-Token": apiKey
-}
-}
-);
-
-const data =
-await response.json();
+function anaSayfa(){
 
 content.innerHTML = `
 
@@ -39,16 +19,10 @@ Galatasaray vs Fenerbahçe
 
 </div>
 
-`;
-
-data.matches.slice(0,6).forEach(mac=>{
-
-content.innerHTML += `
-
 <div class="match-card">
 
 <div class="league">
-${mac.competition.name}
+Süper Lig
 </div>
 
 <div class="teams logos">
@@ -56,11 +30,11 @@ ${mac.competition.name}
 <div class="team">
 
 <div class="team-logo">
-⚽
+🟡🔴
 </div>
 
 <span>
-${mac.homeTeam.name}
+Galatasaray
 </span>
 
 </div>
@@ -72,11 +46,11 @@ VS
 <div class="team">
 
 <div class="team-logo">
-🏆
+🟡🔵
 </div>
 
 <span>
-${mac.awayTeam.name}
+Fenerbahçe
 </span>
 
 </div>
@@ -84,77 +58,103 @@ ${mac.awayTeam.name}
 </div>
 
 <div class="prediction">
-
 AI Tahmini:
 <b>2.5 ÜST 🔥</b>
-
-</div>
-
-<div class="odds">
-
-<div class="odd-box">
-
-<div class="odd-title">
-MS1
-</div>
-
-<div class="odd-value">
-1.85
 </div>
 
 </div>
-
-<div class="odd-box">
-
-<div class="odd-title">
-X
-</div>
-
-<div class="odd-value">
-3.20
-</div>
-
-</div>
-
-<div class="odd-box">
-
-<div class="odd-title">
-MS2
-</div>
-
-<div class="odd-value">
-2.10
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
-});
-
-}catch(error){
-
-content.innerHTML = `
 
 <div class="match-card">
 
-<h2>API Hatası ❌</h2>
+<div class="league">
+Premier League
+</div>
 
-<p>
-API bağlantısı kurulamadı.
-</p>
+<div class="teams logos">
+
+<div class="team">
+
+<div class="team-logo">
+🔵
+</div>
+
+<span>
+Manchester City
+</span>
+
+</div>
+
+<div class="vs">
+VS
+</div>
+
+<div class="team">
+
+<div class="team-logo">
+🔴
+</div>
+
+<span>
+Arsenal
+</span>
+
+</div>
+
+</div>
+
+<div class="prediction">
+AI Tahmini:
+<b>KG VAR ✅</b>
+</div>
+
+</div>
+
+<div class="match-card">
+
+<div class="league">
+La Liga
+</div>
+
+<div class="teams logos">
+
+<div class="team">
+
+<div class="team-logo">
+🔵🔴
+</div>
+
+<span>
+Barcelona
+</span>
+
+</div>
+
+<div class="vs">
+VS
+</div>
+
+<div class="team">
+
+<div class="team-logo">
+⚪
+</div>
+
+<span>
+Real Madrid
+</span>
+
+</div>
+
+</div>
+
+<div class="prediction">
+AI Tahmini:
+<b>MS1 ⚽</b>
+</div>
 
 </div>
 
 `;
-
-console.log(error);
-
-}
 
 }
 
@@ -176,7 +176,7 @@ CANLI
 
 </div>
 
-<div id="dakika">
+<div>
 67'
 </div>
 
@@ -190,7 +190,9 @@ CANLI
 🔵🔴
 </div>
 
-<span>Barcelona</span>
+<span>
+Barcelona
+</span>
 
 </div>
 
@@ -204,7 +206,9 @@ CANLI
 ⚪
 </div>
 
-<span>Real Madrid</span>
+<span>
+Real Madrid
+</span>
 
 </div>
 
