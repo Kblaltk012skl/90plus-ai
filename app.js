@@ -1,14 +1,38 @@
 const content =
 document.getElementById("content");
 
-function anaSayfa(){
+const apiKey =
+"8fc952c2878440478c5aea4fbc80d5b5";
 
-content.innerHTML = `
+async function anaSayfa(){
+
+content.innerHTML =
+"<p style='text-align:center'>Yükleniyor...</p>";
+
+try{
+
+const response = await fetch(
+"https://api.football-data.org/v4/matches",
+{
+headers:{
+"X-Auth-Token": apiKey
+}
+}
+);
+
+const data =
+await response.json();
+
+content.innerHTML = "";
+
+data.matches.slice(0,6).forEach(mac=>{
+
+content.innerHTML += `
 
 <div class="match-card">
 
 <div class="league">
-🇹🇷 Süper Lig
+${mac.competition.name}
 </div>
 
 <div class="teams logos">
@@ -16,10 +40,12 @@ content.innerHTML = `
 <div class="team">
 
 <div class="team-logo">
-🟡🔴
+⚽
 </div>
 
-<span>Galatasaray</span>
+<span>
+${mac.homeTeam.name}
+</span>
 
 </div>
 
@@ -30,10 +56,12 @@ VS
 <div class="team">
 
 <div class="team-logo">
-🟡🔵
+🏆
 </div>
 
-<span>Fenerbahçe</span>
+<span>
+${mac.awayTeam.name}
+</span>
 
 </div>
 
@@ -88,90 +116,29 @@ MS2
 
 </div>
 
+`;
+
+});
+
+}catch(error){
+
+content.innerHTML = `
+
 <div class="match-card">
 
-<div class="league">
-🏴 Premier League
-</div>
+<h2>API Hatası ❌</h2>
 
-<div class="teams logos">
-
-<div class="team">
-
-<div class="team-logo">
-🔵
-</div>
-
-<span>Manchester City</span>
-
-</div>
-
-<div class="vs">
-VS
-</div>
-
-<div class="team">
-
-<div class="team-logo">
-🔴
-</div>
-
-<span>Arsenal</span>
-
-</div>
-
-</div>
-
-<div class="prediction">
-
-AI Tahmini:
-<b>KG VAR ✔</b>
-
-</div>
-
-<div class="odds">
-
-<div class="odd-box">
-
-<div class="odd-title">
-MS1
-</div>
-
-<div class="odd-value">
-1.60
-</div>
-
-</div>
-
-<div class="odd-box">
-
-<div class="odd-title">
-X
-</div>
-
-<div class="odd-value">
-3.40
-</div>
-
-</div>
-
-<div class="odd-box">
-
-<div class="odd-title">
-MS2
-</div>
-
-<div class="odd-value">
-2.90
-</div>
-
-</div>
-
-</div>
+<p>
+API bağlantısı kurulamadı.
+</p>
 
 </div>
 
 `;
+
+console.log(error);
+
+}
 
 }
 
