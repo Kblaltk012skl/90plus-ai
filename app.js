@@ -1,15 +1,24 @@
 const content =
 document.getElementById("content");
 
+const apiKey =
+"7f9129de6f9ad4f9d5564966b30cedd4";
+
 async function anaSayfa(){
 
 content.innerHTML =
-"<p style='text-align:center'>Yükleniyor...</p>";
+"<p style='text-align:center'>Canlı maçlar yükleniyor...</p>";
 
 try{
 
 const response = await fetch(
-"https://raw.githubusercontent.com/openfootball/football.json/master/2020-21/en.1.json"
+"https://api.sportsrc.org/v2/soccer/matches",
+{
+headers:{
+"Authorization":
+apiKey
+}
+}
 );
 
 const data =
@@ -17,14 +26,14 @@ await response.json();
 
 content.innerHTML = "";
 
-data.matches.slice(0,10).forEach(mac=>{
+data.data.slice(0,10).forEach(mac=>{
 
 content.innerHTML += `
 
 <div class="match-card">
 
 <div class="league">
-Premier League
+${mac.league}
 </div>
 
 <div class="teams logos">
@@ -36,7 +45,7 @@ Premier League
 </div>
 
 <span>
-${mac.team1}
+${mac.home_team}
 </span>
 
 </div>
@@ -52,7 +61,7 @@ VS
 </div>
 
 <span>
-${mac.team2}
+${mac.away_team}
 </span>
 
 </div>
@@ -61,8 +70,9 @@ ${mac.team2}
 
 <div class="prediction">
 
-AI Tahmini:
-<b>KG VAR 🔥</b>
+<b>
+${mac.status}
+</b>
 
 </div>
 
@@ -78,9 +88,11 @@ content.innerHTML = `
 
 <div class="match-card">
 
-<h2>Hata ❌</h2>
+<h2>API Hatası ❌</h2>
 
-<p>Maçlar yüklenemedi.</p>
+<p>
+Canlı maçlar çekilemedi.
+</p>
 
 </div>
 
@@ -94,70 +106,7 @@ console.log(error);
 
 function canli(){
 
-content.innerHTML = `
-
-<div class="match-card live-card">
-
-<div class="live-top">
-
-<div>
-
-<span class="live-dot"></span>
-
-<span class="live-text">
-CANLI
-</span>
-
-</div>
-
-<div>
-72'
-</div>
-
-</div>
-
-<div class="teams logos">
-
-<div class="team">
-
-<div class="team-logo">
-🔵🔴
-</div>
-
-<span>
-Barcelona
-</span>
-
-</div>
-
-<div id="score">
-2 - 1
-</div>
-
-<div class="team">
-
-<div class="team-logo">
-⚪
-</div>
-
-<span>
-Real Madrid
-</span>
-
-</div>
-
-</div>
-
-<div class="prediction">
-
-AI Canlı Tahmin:
-<b>Sonraki Gol Barcelona ⚽</b>
-
-</div>
-
-</div>
-
-`;
+anaSayfa();
 
 }
 
