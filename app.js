@@ -1,167 +1,54 @@
-const content =
-document.getElementById("content");
+// API Bilgileri ve Sizin Özel Anahtarınız
+const apiKey = "1mdJzL0o4c4FBNlkgUXzLm:42svR4LrIQ93xyeBlCQHEp";
+// Tarayıcı engelini aşan doğrudan ve güncel bir CORS köprüsü ekledik
+const apiUrl = "https://allorigins.win" + encodeURIComponent("https://collectapi.com");
 
-const apiKey =
-"7f9129de6f9ad4f9d5564966b30cedd4";
+// HTML'deki maç listesi alanını seçiyoruz
+const macListesiAlani = document.getElementById("mac-listesi");
 
-async function anaSayfa(){
+// API'den verileri çeken fonksiyon
+async function maclariGetir() {
+    try {
+        const response = await fetch(apiUrl);
+        const wrapperData = await response.json();
+        
+        // Köprü sunucudan gelen gerçek metni JSON formatına çeviriyoruz
+        const data = JSON.parse(wrapperData.contents);
 
-content.innerHTML =
-"<p style='text-align:center'>Canlı maçlar yükleniyor...</p>";
+        // İstek başarılı olduysa ve veri geldiyse
+        if (data.success && data.result) {
+            // Yükleniyor yazısını temizle
+            macListesiAlani.innerHTML = "";
 
-try{
+            // Her bir maçı döngüyle HTML içerisine yazdır
+            data.result.forEach(mac => {
+                const macKarti = `
+                    <div class="mac-kart">
+                        <div class="takim ev-sahibi">${mac.home || 'Ev Sahibi'}</div>
+                        <div class="skor-kutusu">${mac.skor || 'v'}</div>
+                        <div class="takim deplasman">${mac.away || 'Deplasman'}</div>
+                    </div>
+                `;
+                macListesiAlani.innerHTML += macKarti;
+            });
+        } else {
+            hataGoster("Maç verileri şu anda alınamadı. API kotanızı veya anahtarınızı kontrol edin.");
+        }
 
-const response = await fetch(
-"https://api.sportsrc.org/v2/soccer/matches",
-{
-headers:{
-"Authorization":
-apiKey
-}
-}
-);
-
-const data =
-await response.json();
-
-content.innerHTML = "";
-
-data.data.slice(0,10).forEach(mac=>{
-
-content.innerHTML += `
-
-<div class="match-card">
-
-<div class="league">
-${mac.league}
-</div>
-
-<div class="teams logos">
-
-<div class="team">
-
-<div class="team-logo">
-⚽
-</div>
-
-<span>
-${mac.home_team}
-</span>
-
-</div>
-
-<div class="vs">
-VS
-</div>
-
-<div class="team">
-
-<div class="team-logo">
-🏆
-</div>
-
-<span>
-${mac.away_team}
-</span>
-
-</div>
-
-</div>
-
-<div class="prediction">
-
-<b>
-${mac.status}
-</b>
-
-</div>
-
-</div>
-
-`;
-
-});
-
-}catch(error){
-
-content.innerHTML = `
-
-<div class="match-card">
-
-<h2>API Hatası ❌</h2>
-
-<p>
-Canlı maçlar çekilemedi.
-</p>
-
-</div>
-
-`;
-
-console.log(error);
-
+    } catch (error) {
+        console.error("Hata oluştu:", error);
+        hataGoster("Bağlantı hatası! Kodlar yüklenemedi.");
+    }
 }
 
+// Hata mesajını ekrana basan yardımcı fonksiyon
+function hataGoster(mesaj) {
+    macListesiAlani.innerHTML = `
+        <div class="hata-ekrani">
+            <p>⚠️ ${mesaj}</p>
+        </div>
+    `;
 }
 
-function canli(){
-
-anaSayfa();
-
-}
-
-function kupon(){
-
-content.innerHTML = `
-
-<div class="match-card">
-
-<h2>🎫 Günün Kuponu</h2>
-
-<p>Galatasaray Kazanır</p>
-
-<p>KG VAR</p>
-
-<p>2.5 ÜST</p>
-
-<br>
-
-<b>Toplam Oran: 5.42</b>
-
-</div>
-
-`;
-
-}
-
-function profil(){
-
-content.innerHTML = `
-
-<div class="match-card">
-
-<h2>👤 Profil</h2>
-
-<p>Premium Üye</p>
-
-<p>VIP Tahminler Açık</p>
-
-</div>
-
-`;
-
-}
-
-anaSayfa();
-
-document.querySelectorAll(".nav-item")[0]
-.onclick = anaSayfa;
-
-document.querySelectorAll(".nav-item")[1]
-.onclick = canli;
-
-document.querySelectorAll(".nav-item")[2]
-.onclick = kupon;
-
-document.querySelectorAll(".nav-item")[3]
-.onclick = profil;
+// Sayfa yüklendiğinde otomatik olarak fonksiyonu çalıştır
+window.addEventListener("DOMContentLoaded", maclariGetir);
