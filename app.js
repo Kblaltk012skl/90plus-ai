@@ -1,44 +1,166 @@
-// API Bilgileri ve Sizin Özel Anahtarınız
-const apiKey = "1mdJzL0o4c4FBNlkgUXzLm:42svR4LrIQ93xyeBlCQHEp";
-const apiUrl = "https://allorigins.win" + encodeURIComponent("https://collectapi.com");
+const content =
+document.getElementById("content");
 
-async function maclariGetir() {
-    try {
-        const response = await fetch(apiUrl);
-        const wrapperData = await response.json();
-        const data = JSON.parse(wrapperData.contents);
+const apiKey =
+"1mdJzL0o4c4FBNlkgUXzLm:42svR4LrIQ93xyeBlCQHEp";
 
-        if (data.success && data.result) {
-            // Sizin kendi index.html dosyanızda alt menünün (Ana Sayfa, Canlı, Kupon) 
-            // hemen üstünde yer alan ana kapsayıcıyı seçiyoruz.
-            // Eğer sitenizde boş kalan kısmın sınıfı farklıysa burayı güncelleyebilirsiniz.
-            let anaKapsayici = document.querySelector('.app-container') || document.body;
+async function anaSayfa(){
 
-            // Maçları eklemek için yeni bir liste alanı oluşturuyoruz
-            const listeDiv = document.createElement('div');
-            listeDiv.style.cssText = "display:flex; flex-direction:column; gap:12px; padding:20px; max-width:650px; margin:0 auto; margin-bottom:80px;";
+content.innerHTML =
+"<p style='text-align:center'>Canlı maçlar yükleniyor...</p>";
 
-            data.result.forEach(mac => {
-                listeDiv.innerHTML += `
-                    <div style="display:flex; justify-content:space-between; align-items:center; background:#161b22; padding:15px 20px; border-radius:10px; border:1px solid #30363d;">
-                        <div style="width:40%; font-weight:600; font-size:15px; color:#f0f6fc; text-align:right;">${mac.home || 'Ev Sahibi'}</div>
-                        <div style="width:18%; text-align:center; background:#1f883d; color:#ffffff; border-radius:6px; padding:6px 0; font-weight:bold; font-size:16px;">${mac.skor || 'v'}</div>
-                        <div style="width:40%; font-weight:600; font-size:15px; color:#f0f6fc; text-align:left;">${mac.away || 'Deplasman'}</div>
-                    </div>
-                `;
-            });
+try{
 
-            // Alt menü butonlarının (Navigasyon barının) üzerine gelecek şekilde yerleştir
-            const navBar = document.querySelector('footer') || document.querySelector('[style*="position: fixed"]');
-            if (navBar) {
-                anaKapsayici.insertBefore(listeDiv, navBar);
-            } else {
-                anaKapsayici.appendChild(listeDiv);
-            }
-        }
-    } catch (error) {
-        console.error("Hata:", error);
-    }
+const response = await fetch(
+"https://api.sportsrc.org/v2/soccer/matches",
+{
+headers:{
+"Authorization": apiKey
+}
+}
+);
+
+const data =
+await response.json();
+
+content.innerHTML = "";
+
+data.data.slice(0,10).forEach(mac=>{
+
+content.innerHTML += `
+
+<div class="match-card">
+
+<div class="league">
+${mac.league}
+</div>
+
+<div class="teams logos">
+
+<div class="team">
+
+<div class="team-logo">
+⚽
+</div>
+
+<span>
+${mac.home_team}
+</span>
+
+</div>
+
+<div class="vs">
+VS
+</div>
+
+<div class="team">
+
+<div class="team-logo">
+🏆
+</div>
+
+<span>
+${mac.away_team}
+</span>
+
+</div>
+
+</div>
+
+<div class="prediction">
+
+<b>
+${mac.status}
+</b>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}catch(error){
+
+content.innerHTML = `
+
+<div class="match-card">
+
+<h2>API Hatası ❌</h2>
+
+<p>
+Canlı maçlar çekilemedi.
+</p>
+
+</div>
+
+`;
+
+console.log(error);
+
 }
 
-window.addEventListener("DOMContentLoaded", maclariGetir);
+}
+
+function canli(){
+
+anaSayfa();
+
+}
+
+function kupon(){
+
+content.innerHTML = `
+
+<div class="match-card">
+
+<h2>🎫 Günün Kuponu</h2>
+
+<p>Galatasaray Kazanır</p>
+
+<p>KG VAR</p>
+
+<p>2.5 ÜST</p>
+
+<br>
+
+<b>Toplam Oran: 5.42</b>
+
+</div>
+
+`;
+
+}
+
+function profil(){
+
+content.innerHTML = `
+
+<div class="match-card">
+
+<h2>👤 Profil</h2>
+
+<p>Premium Üye</p>
+
+<p>VIP Tahminler Açık</p>
+
+</div>
+
+`;
+
+}
+
+anaSayfa();
+
+document.querySelectorAll(".nav-item")[0]
+.onclick = anaSayfa;
+
+document.querySelectorAll(".nav-item")[1]
+.onclick = canli;
+
+document.querySelectorAll(".nav-item")[2]
+.onclick = kupon;
+
+document.querySelectorAll(".nav-item")[3]
+.onclick = profil;
