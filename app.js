@@ -1,68 +1,25 @@
 const content =
 document.getElementById("content");
 
-function anaSayfa(){
+async function anaSayfa(){
 
-content.innerHTML = `
+content.innerHTML =
+"<p style='text-align:center'>Yükleniyor...</p>";
 
-<div class="hero-card">
+try{
 
-<h2>🔥 Günün Bankosu</h2>
+const response = await fetch(
+"https://raw.githubusercontent.com/openfootball/football.json/master/2020-21/en.1.json"
+);
 
-<p>
-Galatasaray vs Fenerbahçe
-</p>
+const data =
+await response.json();
 
-<div class="hero-rate">
-%92 AI Güven
-</div>
+content.innerHTML = "";
 
-</div>
+data.matches.slice(0,10).forEach(mac=>{
 
-<div class="match-card">
-
-<div class="league">
-Süper Lig
-</div>
-
-<div class="teams logos">
-
-<div class="team">
-
-<div class="team-logo">
-🟡🔴
-</div>
-
-<span>
-Galatasaray
-</span>
-
-</div>
-
-<div class="vs">
-VS
-</div>
-
-<div class="team">
-
-<div class="team-logo">
-🟡🔵
-</div>
-
-<span>
-Fenerbahçe
-</span>
-
-</div>
-
-</div>
-
-<div class="prediction">
-AI Tahmini:
-<b>2.5 ÜST 🔥</b>
-</div>
-
-</div>
+content.innerHTML += `
 
 <div class="match-card">
 
@@ -75,11 +32,11 @@ Premier League
 <div class="team">
 
 <div class="team-logo">
-🔵
+⚽
 </div>
 
 <span>
-Manchester City
+${mac.team1}
 </span>
 
 </div>
@@ -91,11 +48,11 @@ VS
 <div class="team">
 
 <div class="team-logo">
-🔴
+🏆
 </div>
 
 <span>
-Arsenal
+${mac.team2}
 </span>
 
 </div>
@@ -103,58 +60,35 @@ Arsenal
 </div>
 
 <div class="prediction">
+
 AI Tahmini:
-<b>KG VAR ✅</b>
-</div>
+<b>KG VAR 🔥</b>
 
-</div>
-
-<div class="match-card">
-
-<div class="league">
-La Liga
-</div>
-
-<div class="teams logos">
-
-<div class="team">
-
-<div class="team-logo">
-🔵🔴
-</div>
-
-<span>
-Barcelona
-</span>
-
-</div>
-
-<div class="vs">
-VS
-</div>
-
-<div class="team">
-
-<div class="team-logo">
-⚪
-</div>
-
-<span>
-Real Madrid
-</span>
-
-</div>
-
-</div>
-
-<div class="prediction">
-AI Tahmini:
-<b>MS1 ⚽</b>
 </div>
 
 </div>
 
 `;
+
+});
+
+}catch(error){
+
+content.innerHTML = `
+
+<div class="match-card">
+
+<h2>Hata ❌</h2>
+
+<p>Maçlar yüklenemedi.</p>
+
+</div>
+
+`;
+
+console.log(error);
+
+}
 
 }
 
@@ -177,7 +111,7 @@ CANLI
 </div>
 
 <div>
-67'
+72'
 </div>
 
 </div>
@@ -235,13 +169,11 @@ content.innerHTML = `
 
 <h2>🎫 Günün Kuponu</h2>
 
-<br>
-
 <p>Galatasaray Kazanır</p>
 
-<p>2.5 ÜST</p>
-
 <p>KG VAR</p>
+
+<p>2.5 ÜST</p>
 
 <br>
 
@@ -261,13 +193,9 @@ content.innerHTML = `
 
 <h2>👤 Profil</h2>
 
-<br>
+<p>Premium Üye</p>
 
-<p>Kullanıcı: Premium Üye</p>
-
-<p>VIP Tahminler: Açık</p>
-
-<p>Bildirimler: Açık</p>
+<p>VIP Tahminler Açık</p>
 
 </div>
 
